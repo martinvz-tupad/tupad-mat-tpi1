@@ -1,0 +1,3 @@
+- documentar el bien el readme, agregar nuestros datos
+- mejorar/definir las pantallas
+- implementar todo
