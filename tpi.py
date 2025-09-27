@@ -4,8 +4,6 @@ from rich.console import Console
 
 console = Console()
 
-random_integer = random.randint(1, 100)
-random_binary = bin(random_integer)[2:]
 
 def decimal_a_binario(n):
     decimal_counter = n
@@ -37,7 +35,9 @@ def binario_a_decimal(n):
     return decimal_value
 
 
-def juego_decimal_a_binario():   
+def juego_decimal_a_binario():
+    random_integer = random.randint(1, 100)
+   
     console.print("[blue]>> Ejecutando juego Decimal a Binario...[/blue]")
     console.print("[bold cyan]=== Juego: Decimal a Binario ===[/bold cyan]")
     console.print("Convierte el siguiente número decimal a binario:\n")
@@ -58,7 +58,10 @@ def juego_decimal_a_binario():
      
     
 
-def juego_binario_a_decimal():        
+def juego_binario_a_decimal():
+    random_integer = random.randint(1, 100)
+    random_binary = decimal_a_binario(random_integer)
+
     console.print("[bold cyan]=== Juego: Binario a Decimal ===[/bold cyan]")
     console.print("Convierte el siguiente número binario a decimal:")
     console.print(f"[bold yellow]Número: {random_binary}[/bold yellow]\n")
