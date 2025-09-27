@@ -1,43 +1,137 @@
+import random
+import threading
 from rich.console import Console
 
 console = Console()
 
+random_integer = random.randint(1, 100)
+random_binary = bin(random_integer)[2:]
 
-def juego_decimal_a_binario():    
-    # dummy screen
+def decimal_a_binario(n):
+    decimal_counter = n
+    correct_bin = []
+
+    while decimal_counter > 0:
+        remainder = decimal_counter % 2
+        decimal_counter = decimal_counter // 2
+        correct_bin.append(str(remainder))
+
+    correct_bin.reverse()
+    correct_bin = ''.join(correct_bin)
+
+    return correct_bin
+
+def binario_a_decimal(n):
+    binary_str = str(n)
+    decimal_value = 0
+    console.print(f'Binario random: {binary_str}')
+    reversed_binary = list(binary_str)
+    reversed_binary.reverse()
+    console.print(f'Binario reverse: {reversed_binary}')
+
+    for i in range(0, len(binary_str)):
+        bit = int(reversed_binary[i])
+        decimal_value += bit * (2 ** i)
+        console.print(f'Decimal: {decimal_value}')
+
+    return decimal_value
+
+
+def juego_decimal_a_binario():   
     console.print("[blue]>> Ejecutando juego Decimal a Binario...[/blue]")
     console.print("[bold cyan]=== Juego: Decimal a Binario ===[/bold cyan]")
     console.print("Convierte el siguiente número decimal a binario:\n")
-    console.print("[bold yellow]Número: 25[/bold yellow]\n")
-    console.print("Ingresa el resultado en binario: [white]_[/white]")
-    console.print("\n[green]✅ Correcto![/green] 25 = 11001₂")
+    console.print(f"[bold yellow]Número: {random_integer}[/bold yellow]\n")
+    bin_user = input("Ingresa el resultado en binario:")
+    console.print("[bold cyan]=== Calculando... ===[/bold cyan]")
+
+    # Calculamos el binario del numero random
+
+    correct_bin = decimal_a_binario(random_integer)
+    
+    # Mostramos el resultado
+
+    if(bin_user == correct_bin):
+        console.print(f"\n[green]✅ Correcto![/green]El decimal {random_integer} es igual al binario [bold green]{correct_bin}[/bold green]")
+    else:
+        console.print(f"\n[red]❌ Incorrecto[/red]. La respuesta correcta era [bold green]{correct_bin}[/bold green]")
+     
     
 
 def juego_binario_a_decimal():        
-    # dummy screen 
     console.print("[bold cyan]=== Juego: Binario a Decimal ===[/bold cyan]")
-    console.print("Convierte el siguiente número binario a decimal:\n")
-    console.print("[bold yellow]Número: 10110[/bold yellow]\n")
-    console.print("Ingresa el resultado en decimal: [white]_[/white]")
-    console.print("\n[red]❌ Incorrecto[/red]. La respuesta correcta era [bold green]22[/bold green]")
+    console.print("Convierte el siguiente número binario a decimal:")
+    console.print(f"[bold yellow]Número: {random_binary}[/bold yellow]\n")
+    decimal_user = input("Ingresa el resultado en decimal:")
+
+    console.print("[bold cyan]=== Calculando... ===[/bold cyan]")
+
+    correct_decimal = binario_a_decimal(random_binary)
+
+    if(decimal_user == str(correct_decimal)):
+        console.print(f"\n[green]✅ Correcto![/green]. El numero binario {random_binary} es el decimal [bold green]{correct_decimal}[/bold green]")
+    else:
+        console.print(f"\n[red]❌ Incorrecto[/red]. La respuesta correcta era [bold green]{correct_decimal}[/bold green]")
 
 
 def desafio_contrarreloj():        
     # dummy screen 
     console.print("[bold cyan]=== Desafío Contrarreloj ===[/bold cyan]")
-    console.print("Responde [bold magenta]5 preguntas[/bold magenta] lo más rápido posible.")
-    console.print("El tiempo empieza al presionar [green]Enter[/green].\n")
-    console.print("[bold]Pregunta 1 de 5:[/bold]")
-    console.print("Convierte 13 → binario")
-    console.print("Tu respuesta: [white]_[/white]")
 
-    # TODO: agregar el listado de respuestas (correctas incorrectas) 
-    # tal cual lo hace la plataforma de la UTN con las autoevaluaciones
-    # usar listas para guardar las respuestas (lista de listas)
+    # TODO: habilitar la opcion de elegir entre decimal a binario y viceversa
 
+    decimals = []
+    binaries = []
+    success_count = 0
+
+    for i in range(0, 5):
+        r_decimal = random.randint(1,100)
+        r_binaries = decimal_a_binario(r_decimal)
+
+        decimals.append(r_decimal)
+        binaries.append(r_binaries)
+
+    console.print("Responde [bold magenta]5 preguntas en un minuto[/bold magenta], ¿te crees capaz?.")
+    start_or_menu = console.input("[green]El tiempo empieza al ingresar 1, ingresa 0 para volver al menu:[/green].")
+
+    if(start_or_menu == "1"):
+        game_on = True  
+        console.print("[bold red]¡Tiempo iniciado![/bold red] Tienes 60 segundos para responder 5 preguntas.\n")
+    else:
+        console.print("[bold yellow]Volviendo al menú...[/bold yellow]")
+        return
+
+    def timeout():
+        nonlocal game_on
+        game_on = False
+        console.print("\n[bold red]¡Tiempo terminado![/bold red]")
+        console.print("\n[bold green]¡Fin del desafío![/bold green]")
+        console.print(f"Aciertos: [bold blue]{success_count}/5[/bold blue]")
+        console.print("[bold yellow]Apreta enter Enter para volver al menú...[/bold yellow]")
+    
+    timer = threading.Timer(60, timeout)
+    timer.start()
+
+    while game_on == True and timer.is_alive() == True:
+
+     for i in range(0, 5):
+        if game_on == False:
+            break
+        console.print(f"[bold]Pregunta {i+1} de 5:[/bold]")
+        console.print(f"Convierte {decimals[i]} → binario")
+        bin_user = input("Tu respuesta: ")
+        if game_on == False:
+            break
+        if(int(bin_user) == int(binaries[i])):
+            console.print(f"[green]✅ Correcto![/green]El decimal {decimals[i]} es igual al binario [bold green]{binaries[i]}[/bold green]\n")
+            success_count += 1
+        else:
+            console.print(f"[red]❌ Incorrecto[/red]. La respuesta correcta era [bold green]{binaries[i]}[/bold green]\n")
+    
+    timer.cancel()
     console.print("\n[bold green]¡Fin del desafío![/bold green]")
-    console.print("Aciertos: [bold blue]4/5[/bold blue]")
-    console.print("Tiempo total: [bold yellow]42 segundos[/bold yellow]")
+    console.print(f"Aciertos: [bold blue]{success_count}/5[/bold blue]")
+    return
 
 
 def tutorial_decimal_a_binario():        
