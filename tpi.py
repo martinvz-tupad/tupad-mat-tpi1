@@ -1,11 +1,8 @@
 import random
 import threading
-from rich.console import Console
+from rich.console import Console 
 
 console = Console()
-
-random_integer = random.randint(1, 100)
-random_binary = bin(random_integer)[2:]
 
 def decimal_a_binario(n):
     decimal_counter = n
@@ -24,20 +21,20 @@ def decimal_a_binario(n):
 def binario_a_decimal(n):
     binary_str = str(n)
     decimal_value = 0
-    console.print(f'Binario random: {binary_str}')
     reversed_binary = list(binary_str)
     reversed_binary.reverse()
-    console.print(f'Binario reverse: {reversed_binary}')
 
     for i in range(0, len(binary_str)):
         bit = int(reversed_binary[i])
         decimal_value += bit * (2 ** i)
-        console.print(f'Decimal: {decimal_value}')
 
     return decimal_value
 
 
 def juego_decimal_a_binario():   
+
+    random_integer = random.randint(1, 100)
+
     console.print("[blue]>> Ejecutando juego Decimal a Binario...[/blue]")
     console.print("[bold cyan]=== Juego: Decimal a Binario ===[/bold cyan]")
     console.print("Convierte el siguiente número decimal a binario:\n")
@@ -59,6 +56,10 @@ def juego_decimal_a_binario():
     
 
 def juego_binario_a_decimal():        
+
+    random_integer = random.randint(1, 100)
+    random_binary = decimal_a_binario(random_integer)
+
     console.print("[bold cyan]=== Juego: Binario a Decimal ===[/bold cyan]")
     console.print("Convierte el siguiente número binario a decimal:")
     console.print(f"[bold yellow]Número: {random_binary}[/bold yellow]\n")
@@ -75,7 +76,6 @@ def juego_binario_a_decimal():
 
 
 def desafio_contrarreloj():        
-    # dummy screen 
     console.print("[bold cyan]=== Desafío Contrarreloj ===[/bold cyan]")
 
     # TODO: habilitar la opcion de elegir entre decimal a binario y viceversa
@@ -115,6 +115,7 @@ def desafio_contrarreloj():
     while game_on == True and timer.is_alive() == True:
 
      for i in range(0, 5):
+
         if game_on == False:
             break
         console.print(f"[bold]Pregunta {i+1} de 5:[/bold]")
@@ -127,6 +128,11 @@ def desafio_contrarreloj():
             success_count += 1
         else:
             console.print(f"[red]❌ Incorrecto[/red]. La respuesta correcta era [bold green]{binaries[i]}[/bold green]\n")
+
+        if i == 4:
+            game_on = False
+            break
+         
     
     timer.cancel()
     console.print("\n[bold green]¡Fin del desafío![/bold green]")
@@ -135,7 +141,6 @@ def desafio_contrarreloj():
 
 
 def tutorial_decimal_a_binario():        
-    # dummy screen
     console.print("[bold cyan]=== Tutorial: Decimal a Binario ===[/bold cyan]")
     console.print("Número a convertir: [bold yellow]23[/bold yellow]\n")
 
@@ -148,12 +153,9 @@ def tutorial_decimal_a_binario():
     console.print("Lee los restos de abajo hacia arriba → [bold green]10111₂[/bold green]\n")
     console.print("Presiona [green]Enter[/green] para probar otro número.")
 
-    # si la multiplataforma no lo complica, agregar un pause entre cada paso
-    # para hacerlo un oco mas interactivo y facil de seguir
-
 
 def tutorial_binario_a_decimal():        
-    # dummy screen
+
     console.print("[bold cyan]=== Tutorial: Binario a Decimal ===[/bold cyan]")
     console.print("Número a convertir: [bold yellow]10101[/bold yellow]\n")
 
@@ -163,9 +165,6 @@ def tutorial_binario_a_decimal():
     console.print("= [bold green]21[/bold green]\n")
 
     console.print("Presiona [green]Enter[/green] para probar otro número.")
-
-    # si la multiplataforma no lo complica, agregar un pause entre cada paso
-    # para hacerlo un oco mas interactivo y facil de seguir
 
 
 def menu():
